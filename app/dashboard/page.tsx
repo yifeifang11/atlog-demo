@@ -44,10 +44,18 @@ export default function DashboardPage() {
             <div className="w-full max-w-3xl rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-900">Consent detail</h3>
-                  <p className="text-xs text-slate-500">Consumer {selected.consumerId} responded on {new Date(selected.timestamp).toLocaleString()}.</p>
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    Consent detail
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Consumer {selected.consumerId} responded on{" "}
+                    {new Date(selected.timestamp).toLocaleString()}.
+                  </p>
                 </div>
-                <button className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-100" onClick={() => setSelected(null)}>
+                <button
+                  className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-100"
+                  onClick={() => setSelected(null)}
+                >
                   Close
                 </button>
               </div>
@@ -62,7 +70,9 @@ export default function DashboardPage() {
                 </div>
                 <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
                   <dt className="font-semibold text-slate-800">Status</dt>
-                  <dd className="mt-1">{selected.optedIn ? "Opt-In" : "Opt-Out"}</dd>
+                  <dd className="mt-1">
+                    {selected.optedIn ? "Opt-In" : "Opt-Out"}
+                  </dd>
                 </div>
                 <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
                   <dt className="font-semibold text-slate-800">Surface</dt>
@@ -70,13 +80,21 @@ export default function DashboardPage() {
                 </div>
               </dl>
               <div className="mt-6 rounded-3xl border border-slate-200 bg-slate-50/60 p-4 text-xs text-slate-600">
-                <p className="font-semibold text-slate-800">Synthetic metadata</p>
-                <pre className="mt-2 whitespace-pre-wrap text-[11px] leading-5 text-slate-700">{JSON.stringify(metadata, null, 2)}</pre>
+                <p className="font-semibold text-slate-800">
+                  Synthetic metadata
+                </p>
+                <pre className="mt-2 whitespace-pre-wrap text-[11px] leading-5 text-slate-700">
+                  {JSON.stringify(metadata, null, 2)}
+                </pre>
               </div>
               {disclosure && (
                 <div className="mt-4 rounded-3xl border border-slate-200 bg-white p-4 text-xs text-slate-600">
-                  <p className="font-semibold text-slate-800">Disclosure text</p>
-                  <p className="mt-2 text-[11px] leading-5 text-slate-700">{disclosure.text}</p>
+                  <p className="font-semibold text-slate-800">
+                    Disclosure text
+                  </p>
+                  <p className="mt-2 text-[11px] leading-5 text-slate-700">
+                    {disclosure.text}
+                  </p>
                 </div>
               )}
             </div>
@@ -86,12 +104,41 @@ export default function DashboardPage() {
     : null;
 
   function exportCSV() {
-    const header = ["id","consumerId","channel","consentType","status","timestamp","userAction","disclosureId","surface","ipAddress","deviceInfo"].join(",") + "\n";
-    const rows = logs.map((l) => {
-      const meta = generateDummyMetadata(l.consumerId);
-      const status = l.optedIn ? "Opt-In" : "Opt-Out";
-      return [l.id,l.consumerId,l.channel,l.consentType,status,new Date(l.timestamp).toISOString(),l.userAction,l.disclosureId,l.metadata.surface,meta.ipAddress,meta.deviceInfo].map((v)=>`"${String(v).replace(/"/g,'""')}"`).join(",");
-    }).join("\n");
+    const header =
+      [
+        "id",
+        "consumerId",
+        "channel",
+        "consentType",
+        "status",
+        "timestamp",
+        "userAction",
+        "disclosureId",
+        "surface",
+        "ipAddress",
+        "deviceInfo",
+      ].join(",") + "\n";
+    const rows = logs
+      .map((l) => {
+        const meta = generateDummyMetadata(l.consumerId);
+        const status = l.optedIn ? "Opt-In" : "Opt-Out";
+        return [
+          l.id,
+          l.consumerId,
+          l.channel,
+          l.consentType,
+          status,
+          new Date(l.timestamp).toISOString(),
+          l.userAction,
+          l.disclosureId,
+          l.metadata.surface,
+          meta.ipAddress,
+          meta.deviceInfo,
+        ]
+          .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+          .join(",");
+      })
+      .join("\n");
     const csv = header + rows;
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -104,7 +151,9 @@ export default function DashboardPage() {
 
   function clearLogs() {
     if (typeof window === "undefined") return;
-    const confirmed = window.confirm("Clear all consent logs? This cannot be undone.");
+    const confirmed = window.confirm(
+      "Clear all consent logs? This cannot be undone."
+    );
     if (!confirmed) return;
     saveConsentLogs([]);
     localStorage.removeItem("chatbot-consent-status");
@@ -120,9 +169,12 @@ export default function DashboardPage() {
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">Consent events recorded in this browser</h1>
+              <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">
+                Consent events recorded in this browser
+              </h1>
               <p className="max-w-2xl text-sm text-slate-600">
-                Use the controls to export or clear data while you experiment with the other demo surfaces.
+                Use the controls to export or clear data while you experiment
+                with the other demo surfaces.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -144,30 +196,54 @@ export default function DashboardPage() {
 
         <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Total events</p>
-            <p className="mt-3 text-3xl font-bold text-slate-900">{summary.total}</p>
-            <p className="mt-2 text-xs text-slate-500">Includes all consent decisions captured during this session.</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Total events
+            </p>
+            <p className="mt-3 text-3xl font-bold text-slate-900">
+              {summary.total}
+            </p>
+            <p className="mt-2 text-xs text-slate-500">
+              Includes all consent decisions captured during this session.
+            </p>
           </div>
           <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Opted in</p>
-            <p className="mt-3 text-3xl font-bold text-emerald-700">{summary.optedIn}</p>
-            <p className="mt-2 text-xs text-slate-500">Handled via the consent modal surfaces.</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Opted in
+            </p>
+            <p className="mt-3 text-3xl font-bold text-emerald-700">
+              {summary.optedIn}
+            </p>
+            <p className="mt-2 text-xs text-slate-500">
+              Handled via the consent modal surfaces.
+            </p>
           </div>
           <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Opted out</p>
-            <p className="mt-3 text-3xl font-bold text-rose-700">{summary.optedOut}</p>
-            <p className="mt-2 text-xs text-slate-500">Useful for testing revocation handling.</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Opted out
+            </p>
+            <p className="mt-3 text-3xl font-bold text-rose-700">
+              {summary.optedOut}
+            </p>
+            <p className="mt-2 text-xs text-slate-500">
+              Useful for testing revocation handling.
+            </p>
           </div>
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-lg">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">Event ledger</h2>
-              <p className="text-xs text-slate-500">Click any row for disclosure, metadata, and audit notes.</p>
+              <h2 className="text-lg font-semibold text-slate-900">
+                Event ledger
+              </h2>
+              <p className="text-xs text-slate-500">
+                Click any row for disclosure, metadata, and audit notes.
+              </p>
             </div>
             {latestTimestamp && (
-              <p className="text-xs text-slate-500">Last event {new Date(latestTimestamp).toLocaleString()}</p>
+              <p className="text-xs text-slate-500">
+                Last event {new Date(latestTimestamp).toLocaleString()}
+              </p>
             )}
           </div>
           <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-200">
@@ -190,30 +266,54 @@ export default function DashboardPage() {
                   return (
                     <tr
                       key={log.id}
-                      className={`border-t transition hover:bg-blue-50/50 ${isActive ? "bg-blue-100/40" : "bg-white"}`}
+                      className={`border-t transition hover:bg-blue-50/50 ${
+                        isActive ? "bg-blue-100/40" : "bg-white"
+                      }`}
                       onClick={() => setSelected(log)}
                     >
-                      <td className="px-4 py-3 font-mono text-xs text-slate-700">{log.consumerId}</td>
-                      <td className="px-4 py-3 text-slate-700">{log.channel}</td>
-                      <td className="px-4 py-3 text-slate-700">{log.consentType}</td>
+                      <td className="px-4 py-3 font-mono text-xs text-slate-700">
+                        {log.consumerId}
+                      </td>
+                      <td className="px-4 py-3 text-slate-700">
+                        {log.channel}
+                      </td>
+                      <td className="px-4 py-3 text-slate-700">
+                        {log.consentType}
+                      </td>
                       <td className="px-4 py-3">
                         <span
-                          className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${log.optedIn ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}
+                          className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
+                            log.optedIn
+                              ? "bg-emerald-100 text-emerald-700"
+                              : "bg-rose-100 text-rose-700"
+                          }`}
                         >
                           {log.optedIn ? "Opt-In" : "Opt-Out"}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-xs text-slate-600">{new Date(log.timestamp).toLocaleString()}</td>
-                      <td className="px-4 py-3 text-slate-700">{log.userAction}</td>
-                      <td className="px-4 py-3 text-slate-700">{log.disclosureId}</td>
-                      <td className="px-4 py-3 text-slate-700">{log.metadata.surface}</td>
+                      <td className="px-4 py-3 text-xs text-slate-600">
+                        {new Date(log.timestamp).toLocaleString()}
+                      </td>
+                      <td className="px-4 py-3 text-slate-700">
+                        {log.userAction}
+                      </td>
+                      <td className="px-4 py-3 text-slate-700">
+                        {log.disclosureId}
+                      </td>
+                      <td className="px-4 py-3 text-slate-700">
+                        {log.metadata.surface}
+                      </td>
                     </tr>
                   );
                 })}
                 {logs.length === 0 && (
                   <tr>
-                    <td className="px-4 py-5 text-center text-xs text-slate-500" colSpan={8}>
-                      No consent activity captured yet. Trigger any modal to populate the ledger.
+                    <td
+                      className="px-4 py-5 text-center text-xs text-slate-500"
+                      colSpan={8}
+                    >
+                      No consent activity captured yet. Trigger any modal to
+                      populate the ledger.
                     </td>
                   </tr>
                 )}
@@ -224,13 +324,22 @@ export default function DashboardPage() {
 
         <section className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
           <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow">
-            <h3 className="text-base font-semibold text-slate-900">Top surfaces</h3>
-            <p className="mt-1 text-xs text-slate-600">Shows which demo screens have created the most entries.</p>
+            <h3 className="text-base font-semibold text-slate-900">
+              Top surfaces
+            </h3>
+            <p className="mt-1 text-xs text-slate-600">
+              Shows which demo screens have created the most entries.
+            </p>
             <div className="mt-4 space-y-3 text-xs text-slate-600">
               {surfaceBreakdown.length > 0 ? (
                 surfaceBreakdown.map((item) => (
-                  <div key={item.surface} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
-                    <p className="font-semibold text-slate-900">{item.surface}</p>
+                  <div
+                    key={item.surface}
+                    className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4"
+                  >
+                    <p className="font-semibold text-slate-900">
+                      {item.surface}
+                    </p>
                     <p className="mt-1">{item.count} recorded events</p>
                   </div>
                 ))
@@ -246,11 +355,14 @@ export default function DashboardPage() {
             <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 text-xs text-slate-600 shadow">
               <p className="font-semibold text-slate-800">Data hygiene</p>
               <p className="mt-2">
-                Downloadable CSV mirrors the live ledger with ISO timestamps, declared disclosure IDs, and synthetic device metadata for auditing.
+                Downloadable CSV mirrors the live ledger with ISO timestamps,
+                declared disclosure IDs, and synthetic device metadata for
+                auditing.
               </p>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 text-xs text-slate-600 shadow">
-              Tip: Use clear logs before each new walkthrough so the ledger reflects only the scenario you are testing.
+              Tip: Use clear logs before each new walkthrough so the ledger
+              reflects only the scenario you are testing.
             </div>
           </div>
         </section>

@@ -51,7 +51,8 @@ export default function ChatbotWidget() {
             id: "schedule-install",
             label: "Yes, schedule me",
             next: null,
-            followUp: "Awesome! A service advisor will text you available times within the hour.",
+            followUp:
+              "Awesome! A service advisor will text you available times within the hour.",
           },
           {
             id: "more-info",
@@ -68,7 +69,8 @@ export default function ChatbotWidget() {
             id: "have-tech-call",
             label: "Yes, have them call",
             next: null,
-            followUp: "Perfect. Expect a quick call from RoadRunner Tire & Auto in the next 30 minutes.",
+            followUp:
+              "Perfect. Expect a quick call from RoadRunner Tire & Auto in the next 30 minutes.",
           },
           {
             id: "just-info",
@@ -85,7 +87,8 @@ export default function ChatbotWidget() {
             id: "all-set",
             label: "No, I'm all set",
             next: null,
-            followUp: "Glad I could help. Chat again anytime or stop by RoadRunner Tire & Auto!",
+            followUp:
+              "Glad I could help. Chat again anytime or stop by RoadRunner Tire & Auto!",
           },
           {
             id: "something-else",
@@ -100,7 +103,10 @@ export default function ChatbotWidget() {
   );
 
   useEffect(() => {
-    const stored = typeof window !== "undefined" ? localStorage.getItem("chatbot-consent-status") : null;
+    const stored =
+      typeof window !== "undefined"
+        ? localStorage.getItem("chatbot-consent-status")
+        : null;
     if (!stored) return;
     if (stored === "opted-in") {
       setConsented(true);
@@ -129,7 +135,10 @@ export default function ChatbotWidget() {
 
   function handleOption(option: ScriptOption) {
     setMessages((prev) => {
-      const updated = [...prev, { id: makeId("user"), from: "user", text: option.label }];
+      const updated: Message[] = [
+        ...prev,
+        { id: makeId("user"), from: "user", text: option.label },
+      ];
 
       if (option.next === null) {
         updated.push({
@@ -145,7 +154,9 @@ export default function ChatbotWidget() {
       }
 
       const nextStep = script[option.next];
-      updated.push({ id: makeId("bot"), from: "bot", text: nextStep.bot });
+      if (nextStep) {
+        updated.push({ id: makeId("bot"), from: "bot", text: nextStep.bot });
+      }
       return updated;
     });
 
@@ -224,14 +235,20 @@ export default function ChatbotWidget() {
                   )}
 
                   {stepIndex === -1 && (
-                    <button className="rounded border px-3 py-2 text-sm" onClick={restartChat}>
+                    <button
+                      className="rounded border px-3 py-2 text-sm"
+                      onClick={restartChat}
+                    >
                       Restart conversation
                     </button>
                   )}
                 </div>
               ) : consented === false ? (
                 <div className="flex flex-col gap-3 text-sm text-zinc-700">
-                  <p>Understood — we won&apos;t send messages right now. If you want to chat, grant consent below.</p>
+                  <p>
+                    Understood — we won&apos;t send messages right now. If you
+                    want to chat, grant consent below.
+                  </p>
                   <button
                     className="rounded bg-blue-600 px-3 py-2 text-white"
                     onClick={() => setShowConsent(true)}
@@ -241,7 +258,10 @@ export default function ChatbotWidget() {
                 </div>
               ) : (
                 <div className="flex flex-col gap-3 text-sm text-zinc-700">
-                  <p>We just need your permission to send messages about your visit.</p>
+                  <p>
+                    We just need your permission to send messages about your
+                    visit.
+                  </p>
                   <button
                     className="rounded bg-blue-600 px-3 py-2 text-white"
                     onClick={() => setShowConsent(true)}

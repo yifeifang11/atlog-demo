@@ -7,7 +7,14 @@ import { getDisclosureById } from "../lib/disclosures";
 type Props = {
   open: boolean;
   onClose: () => void;
-  channel: "chatbot" | "email" | "sms" | "invoice" | "warranty" | "faq" | "survey";
+  channel:
+    | "chatbot"
+    | "email"
+    | "sms"
+    | "invoice"
+    | "warranty"
+    | "faq"
+    | "survey";
   consentType?: "call" | "sms" | "email";
   surface?: string;
   disclosureId?: string;
@@ -49,7 +56,10 @@ export default function ConsentModal({
           <button className="rounded px-4 py-2" onClick={() => handle(false)}>
             No
           </button>
-          <button className="rounded bg-blue-600 px-4 py-2 text-white" onClick={() => handle(true)}>
+          <button
+            className="rounded bg-blue-600 px-4 py-2 text-white"
+            onClick={() => handle(true)}
+          >
             Yes
           </button>
         </div>

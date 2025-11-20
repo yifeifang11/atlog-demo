@@ -70,11 +70,25 @@ export function generateDummyMetadata(consumerId?: string) {
   };
 }
 
-export function addConsentLog(partial: Partial<ConsentLog> & { channel: Channel; consentType: ConsentType; optedIn: boolean; userAction: string; disclosureId: string; metadata?: Partial<ConsentLog["metadata"]>; consumerId?: string; surface?: string; }) {
+export function addConsentLog(
+  partial: Partial<ConsentLog> & {
+    channel: Channel;
+    consentType: ConsentType;
+    optedIn: boolean;
+    userAction: string;
+    disclosureId: string;
+    metadata?: Partial<ConsentLog["metadata"]>;
+    consumerId?: string;
+    surface?: string;
+  }
+) {
   const now = Date.now();
   const consumerId = partial.consumerId || uuidv4();
   const metadata = {
-    surface: partial.surface || (partial.metadata && partial.metadata.surface) || "unknown",
+    surface:
+      partial.surface ||
+      (partial.metadata && partial.metadata.surface) ||
+      "unknown",
     ipAddress: partial.metadata?.ipAddress,
     deviceInfo: partial.metadata?.deviceInfo,
   } as ConsentLog["metadata"];
